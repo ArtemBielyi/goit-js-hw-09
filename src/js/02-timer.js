@@ -2,17 +2,15 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
-const startBtnEl = document.querySelector('[data-start]');
+const startBtn = document.querySelector('[data-start]');
 const daysEl = document.querySelector('[data-days]');
 const hoursEl = document.querySelector('[data-hours]');
 const minutesEl = document.querySelector('[data-minutes]');
 const secondsEl = document.querySelector('[data-seconds]');
 const inputPicker = document.querySelector('input#datetime-picker');
 
-const timerSpanValue = document.querySelectorAll('.timer span.value');
-
-let intervalId = null;
-startBtnEl.disabled = true;
+let intervalId;
+startBtn.disabled = true;
 
 const options = {
   enableTime: true,
@@ -22,7 +20,7 @@ const options = {
   onClose(selectedDates) {
     if (selectedDates[0] > new Date()) {
       Notify.success('Press START to start the countdown timer');
-      startBtnEl.disabled = false;
+      startBtn.disabled = false;
     } else {
       Notify.failure('Please choose a date in the future');
     }
@@ -31,8 +29,8 @@ const options = {
 
 flatpickr(`input#datetime-picker`, options);
 
-startBtnEl.addEventListener('click', () => {
-  startBtnEl.disabled = true;
+startBtn.addEventListener('click', () => {
+  startBtn.disabled = true;
   intervalId = setInterval(count, 1000);
 });
 
@@ -48,28 +46,10 @@ function count() {
     hoursEl.textContent = addLeadingZero(convertCountdownInObj.hours);
     minutesEl.textContent = addLeadingZero(convertCountdownInObj.minutes);
     secondsEl.textContent = addLeadingZero(convertCountdownInObj.seconds);
-
-    //     timerSpanValue.forEach(el => {
-    //       el.style.color = '#0077cc';
-    //     });
-
-    //     if (countdown <= 11000) {
-    //       timerSpanValue.forEach(el => {
-    //         el.style.color = 'red';
-    //       });
-    //     }
-    //   } else {
-    //     Notify.success('Countdown Finished');
-    //     clearInterval(intervalId);
-
-    //     timerSpanValue.forEach(el => {
-    //       el.style.color = 'grey';
-    //     });
   }
 }
 
 function convertMs(ms) {
-  // Number of milliseconds per unit of time
   const second = 1000;
   const minute = second * 60;
   const hour = minute * 60;
